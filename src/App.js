@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import InventoryListPage from './pages/InventoryListPage';
+import AddInventoryItemPage from './pages/AddInventoryItemPage';
+import UpdateInventoryItemPage from './pages/UpdateInventoryItemPage';
+import DeleteInventoryItemPage from './pages/DeleteInventoryItemPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/inventory" element={<InventoryListPage />} />
+        <Route path="/add" element={<AddInventoryItemPage />} />
+        <Route path="/update/:id" element={<UpdateInventoryItemPage />} />
+        <Route path="/delete/:id" element={<DeleteInventoryItemPage />} />
+        <Route path="/" element={<LoginPage />} />
+      </Routes>
+    </Router>
   );
 }
 
