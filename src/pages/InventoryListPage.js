@@ -12,7 +12,7 @@ const InventoryListPage = () => {
             setError('');
             try {
                 const response = await fetchInventory();
-                setItems(response.data);
+                setItems(response.data.data.inventoryItems);
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to fetch inventory');
             } finally {
@@ -27,7 +27,10 @@ const InventoryListPage = () => {
 
     return (
         <div>
-            <h2>Inventory List</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ color: '#273c75', margin: 0 }}>Inventory List</h2>
+                <a href="/add-inventory" style={{ background: '#273c75', color: 'white', padding: '10px 15px', borderRadius: '5px', textDecoration: 'none', fontWeight: 'bold' }}>+ Add New Item</a>
+            </div>
             <table border="1">
                 <thead>
                     <tr>
@@ -39,11 +42,11 @@ const InventoryListPage = () => {
                 </thead>
                 <tbody>
                     {items.map((item) => (
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
+                        <tr key={item._id}>
+                            <td>{item._id}</td>
                             <td>{item.name}</td>
                             <td>{item.quantity}</td>
-                            <td><a href={`/update/${item.id}`}>Edit</a> | <a href={`/delete/${item.id}`}>Delete</a></td>
+                            <td><a href={`/update/${item._id}`}>Edit</a> | <a href={`/delete/${item._id}`}>Delete</a></td>
                         </tr>
                     ))}
                 </tbody>

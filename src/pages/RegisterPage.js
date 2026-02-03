@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
+import { register } from '../api';
 
-const BACKEND_URL = 'http://localhost:5000'; // Assign your backend URL here
-
-function RegisterPage() {
+const RegisterPage = () => {
   const [form, setForm] = useState({ username: '', email: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -13,47 +15,77 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+    setMessage('');
     try {
-      const res = await axios.post(`${BACKEND_URL}/api/auth/register`, form);
-      setMessage('Registration successful!');
+      await register(form);
+      setMessage('Registration successful! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Registration failed.');
+      setError(err.response?.data?.message || 'Registration failed.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="register-page">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Register</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="register-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f5f6fa' }}>
+      <div style={{ background: '#fff', padding: '2rem 2.5rem', borderRadius: '10px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', minWidth: 350 }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#273c75' }}>Create Account</h2>
+        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+        {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: 4 }}>Username</label>
+            <input
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #dcdde1' }}
+            />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: 4 }}>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #dcdde1' }}
+            />
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', marginBottom: 4 }}>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #dcdde1' }}
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            style={{ width: '100%', padding: 10, background: '#273c75', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 'bold', marginBottom: 10 }}
+          >
+            {loading ? 'Registering...' : 'Register'}
+          </button>
+        </form>
+        <div style={{ textAlign: 'center', marginTop: 10 }}>
+          <span>Already have an account? </span>
+          <Link to="/login" style={{ color: '#0097e6', textDecoration: 'none', fontWeight: 'bold' }}>Login</Link>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default RegisterPage;

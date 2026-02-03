@@ -15,7 +15,7 @@ const LoginPage = () => {
         setError('');
         try {
             const response = await login({ email, password });
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data.data.token);
             navigate('/inventory');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');

@@ -251,7 +251,7 @@ router.put('/:id', [
       updateData,
       { new: true, runValidators: true }
     ).populate('addedBy', 'username email')
-     .populate('lastUpdatedBy', 'username email');
+      .populate('lastUpdatedBy', 'username email');
 
     res.status(200).json({
       status: 'success',
@@ -289,11 +289,12 @@ router.delete('/:id', auth, async (req, res) => {
       });
     }
 
-    // Only admin can delete items
-    if (req.user.role !== 'admin') {
+    // Only admin or the user who added the item can delete it
+    console.log('Delete Request - User Role:', req.user.role);
+    if (req.user.role !== 'admin' && inventoryItem.addedBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         status: 'error',
-        message: 'Access denied. Only admin can delete inventory items.'
+        message: 'Access denied. You can only delete items you added or if you are an admin.'
       });
     }
 
@@ -323,8 +324,8 @@ router.get('/alerts/low-stock', auth, async (req, res) => {
     const lowStockItems = await Inventory.find({
       $expr: { $lte: ['$quantity', '$minStockLevel'] }
     })
-    .populate('addedBy', 'username email')
-    .sort({ quantity: 1 });
+      .populate('addedBy', 'username email')
+      .sort({ quantity: 1 });
 
     res.status(200).json({
       status: 'success',
@@ -387,13 +388,13 @@ router.patch('/:id/stock', [
 
     const updatedItem = await Inventory.findByIdAndUpdate(
       req.params.id,
-      { 
+      {
         quantity: newQuantity,
         lastUpdatedBy: req.user._id
       },
       { new: true, runValidators: true }
     ).populate('addedBy', 'username email')
-     .populate('lastUpdatedBy', 'username email');
+      .populate('lastUpdatedBy', 'username email');
 
     res.status(200).json({
       status: 'success',

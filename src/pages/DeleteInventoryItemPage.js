@@ -16,7 +16,7 @@ const DeleteInventoryItemPage = () => {
             setError('');
             try {
                 const response = await getItem(id);
-                setItem(response.data);
+                setItem(response.data.data.inventoryItem);
             } catch (err) {
                 setError(err.response?.data?.message || 'Failed to load item');
             } finally {

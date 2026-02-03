@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/inventory" element={<InventoryListPage />} />
-        <Route path="/add" element={<AddInventoryItemPage />} />
+        <Route path="/add-inventory" element={<AddInventoryItemPage />} />
         <Route path="/update/:id" element={<UpdateInventoryItemPage />} />
         <Route path="/delete/:id" element={<DeleteInventoryItemPage />} />
         <Route path="/register" element={<RegisterPage />} />

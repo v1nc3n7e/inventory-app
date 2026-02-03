@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const authRoutes = require('./routes/auth');
 const inventoryRoutes = require('./routes/inventory');
@@ -26,8 +27,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://davidtettehankrah4_db
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB connected successfully'))
-.catch((err) => console.error('MongoDB connection error:', err));
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // Routes
 app.use('/api/auth', authRoutes);
