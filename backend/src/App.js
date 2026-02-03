@@ -4,7 +4,6 @@ import InventoryListPage from './pages/InventoryListPage';
 import AddInventoryItemPage from './pages/AddInventoryItemPage';
 import UpdateInventoryItemPage from './pages/UpdateInventoryItemPage';
 import DeleteInventoryItemPage from './pages/DeleteInventoryItemPage';
-import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
         <Route path="/add" element={<AddInventoryItemPage />} />
         <Route path="/update/:id" element={<UpdateInventoryItemPage />} />
         <Route path="/delete/:id" element={<DeleteInventoryItemPage />} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route path="/" element={<LoginPage />} />
       </Routes>
     </Router>
